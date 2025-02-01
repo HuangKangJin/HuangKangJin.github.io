@@ -19,21 +19,22 @@
   <meta name="author" content="youqi lu">
   <meta name="keywords" content="">
   
-    <meta name="description" content="About me南京邮电大学测控技术与仪器 + 西安电子科技大学控制工程目前是SATA SSD 固件工程师感兴趣的领域：固态存储软件开发&#x2F;机器人定位与导航(SLAM)&#x2F;Others常用编程语言：C&#x2F;C++&#x2F;Python爱好：阅读、羽毛球、旅行希望2025年有更多的时间做自己喜欢的事情联系方式：1982084003@qq.com">
-<meta property="og:type" content="website">
-<meta property="og:title" content="关于">
-<meta property="og:url" content="http://example.com/about/index.html">
+    <meta name="description" content="参考链接[1] FEMU&#x2F;nvme源码分析[2] Femu 源码简析与测试环境配置[3] 安装FEMU，并使用FEMU模拟SSD黑盒、OCSSD、NoSSD[4] FEMU环境配置 FEMU模拟器配置与安装主要参考链接[3]和[4]，但是有两个地方是需要修改的。  参考链接[3], 作者文档中使用的为-localtime，目前的QEMU版本已经移除了该方式，改为了-rtc base&amp;#x">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FEMU仿真器学习笔记">
+<meta property="og:url" content="http://example.com/2025/01/30/FEMU%E4%BB%BF%E7%9C%9F%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="About me南京邮电大学测控技术与仪器 + 西安电子科技大学控制工程目前是SATA SSD 固件工程师感兴趣的领域：固态存储软件开发&#x2F;机器人定位与导航(SLAM)&#x2F;Others常用编程语言：C&#x2F;C++&#x2F;Python爱好：阅读、羽毛球、旅行希望2025年有更多的时间做自己喜欢的事情联系方式：1982084003@qq.com">
+<meta property="og:description" content="参考链接[1] FEMU&#x2F;nvme源码分析[2] Femu 源码简析与测试环境配置[3] 安装FEMU，并使用FEMU模拟SSD黑盒、OCSSD、NoSSD[4] FEMU环境配置 FEMU模拟器配置与安装主要参考链接[3]和[4]，但是有两个地方是需要修改的。  参考链接[3], 作者文档中使用的为-localtime，目前的QEMU版本已经移除了该方式，改为了-rtc base&amp;#x">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-01-27T05:14:36.000Z">
-<meta property="article:modified_time" content="2025-02-01T13:24:52.270Z">
+<meta property="article:published_time" content="2025-01-30T04:19:27.000Z">
+<meta property="article:modified_time" content="2025-02-01T15:15:11.090Z">
 <meta property="article:author" content="youqi lu">
+<meta property="article:tag" content="FEMU">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>关于 - Hexo</title>
+  <title>FEMU仿真器学习笔记 - Hexo</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -104,7 +105,7 @@
   <header>
     
 
-<div class="header-inner" style="height: 60vh;">
+<div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
@@ -210,9 +211,49 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle">关于</span>
+            <span id="subtitle">FEMU仿真器学习笔记</span>
           
         </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-01-30 12:19" pubdate>
+          2025年1月30日 中午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          229 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          2 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
 
         
       </div>
@@ -228,80 +269,143 @@
 
   <main>
     
-      <div class="container nopadding-x-md">
-        <div id="board"
-          >
-          
-            <div class="about-avatar">
-              <img src="/img/flower.png" srcset="/img/loading.gif" lazyload class="img-fluid" alt="avatar">
-            </div>
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
+      
 
-<div class="text-center">
-  <div class="about-info">
-    <div class="about-name">路有琦</div>
-    <div class="about-intro">观我旧往，同我仰春；知我晦暗，许我春朝</div>
-    <div class="about-icons">
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
       
-        
-        
-        
-        <a href=https://github.com class="
-           hint--bottom hint--rounded"
-           aria-label="GitHub"
-           target="_blank"
-        >
-          <i class="iconfont icon-github-fill" aria-hidden="true"></i>
-          
-        </a>
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">FEMU仿真器学习笔记</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p>[1] <a href="FEMU/nvme%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90">FEMU&#x2F;nvme源码分析</a><br>[2] <a target="_blank" rel="noopener" href="https://blog.xiocs.com/archives/46/">Femu 源码简析与测试环境配置</a><br>[3] <a target="_blank" rel="noopener" href="https://blog.csdn.net/bijie1196/article/details/120752319">安装FEMU，并使用FEMU模拟SSD黑盒、OCSSD、NoSSD</a><br>[4] <a target="_blank" rel="noopener" href="https://hackmd.io/@UzwkpqmTSKS3rukkbAQPBw/BJgAcpPIq">FEMU环境配置</a></p>
+<h2 id="FEMU模拟器配置与安装"><a href="#FEMU模拟器配置与安装" class="headerlink" title="FEMU模拟器配置与安装"></a>FEMU模拟器配置与安装</h2><p>主要参考链接[3]和[4]，但是有两个地方是需要修改的。</p>
+<ol>
+<li>参考链接[3], 作者文档中使用的为-localtime，目前的QEMU版本已经移除了该方式，改为了-rtc base&#x3D;localtime</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> qemu-system-x86_64 \<br>-cdrom ubuntu-22.04.1-live-server-amd64.iso \<br>-hda femu.qcow2 \<br>-boot d \<br>-net nic -net user \<br>-m 8192 \<br>-rtc base=localtime -smp 8 \<br>-cpu host \<br>-enable-kvm<br></code></pre></td></tr></table></figure>
+<ol start="2">
+<li>编译报错FAILED: libqemuutil.a.p&#x2F;util_async.c.o error: storing the address of local variable ‘slice’ in ‘*ctx.bh_slice_list.sqh_las。参考以下方法解决<a target="_blank" rel="noopener" href="https://gitlab.com/qemu-project/qemu/-/issues/1655">https://gitlab.com/qemu-project/qemu/-/issues/1655</a>.<br>需要修改femu-compile.sh脚本，增加参数“–disable-werror“，修改如下：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-meta">#!/bin/bash</span><br><br>NRCPUS=<span class="hljs-string">&quot;<span class="hljs-subst">$(cat /proc/cpuinfo | grep <span class="hljs-string">&quot;vendor_id&quot;</span> | wc -l)</span>&quot;</span><br><br>make clean<br><span class="hljs-comment"># --disable-werror --extra-cflags=-w --disable-git-update</span><br>../configure --enable-kvm --target-list=x86_64-softmmu --disable-werror<br>make -j <span class="hljs-variable">$NRCPUS</span><br><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;&quot;</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;===&gt; FEMU compilation done ...&quot;</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;&quot;</span><br><span class="hljs-built_in">exit</span><br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
       
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
         
-        
-        
-        <a href=https://douban.com class="
-           hint--bottom hint--rounded"
-           aria-label="豆瓣"
-           target="_blank"
-        >
-          <i class="iconfont icon-douban-fill" aria-hidden="true"></i>
-          
-        </a>
+  <a href="/categories/FEMU/" class="category-chain-item">FEMU</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
       
-        
-        
-        
-        <a  class="qr-trigger
-           "
-           
-           target="_self"
-        >
-          <i class="iconfont icon-wechat-fill" aria-hidden="true"></i>
-          
-            <img class="qr-img" src="/img/wechat.jpg" srcset="/img/loading.gif" lazyload alt="qrcode" />
-          
-        </a>
+        <a href="/tags/FEMU/" class="print-no-link">#FEMU</a>
       
     </div>
-  </div>
+  
 </div>
 
-<article class="about-content page-content mt-5">
-  <div class="markdown-body">
-    <h1 id="About-me"><a href="#About-me" class="headerlink" title="About me"></a>About me</h1><p>南京邮电大学测控技术与仪器 + 西安电子科技大学控制工程<br>目前是SATA SSD 固件工程师<br>感兴趣的领域：固态存储软件开发&#x2F;机器人定位与导航(SLAM)&#x2F;Others<br>常用编程语言：C&#x2F;C++&#x2F;Python<br>爱好：阅读、羽毛球、旅行<br>希望2025年有更多的时间做自己喜欢的事情<br>联系方式：<a href="mailto:&#49;&#x39;&#56;&#50;&#48;&#56;&#x34;&#x30;&#x30;&#51;&#64;&#x71;&#113;&#46;&#x63;&#x6f;&#109;">1982084003@qq.com</a></p>
 
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>FEMU仿真器学习笔记</div>
+      <div>http://example.com/2025/01/30/FEMU仿真器学习笔记/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>youqi lu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年1月30日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
   </div>
 
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/01/29/hexo%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" title="Hexo常用命令">
+                        <span class="hidden-mobile">Hexo常用命令</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
   
-    <!-- Comments -->
+  
     <article id="comments" lazyload>
-      
-      
-        
-      
       
   <div id="valine"></div>
   <script type="text/javascript">
@@ -346,39 +450,61 @@
 
     </article>
   
-</article>
 
 
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-
-
-              </div>
-            </div>
-          </div>
+          </article>
         </div>
       </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
     
 
     
@@ -455,6 +581,46 @@
   
 
 
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
 
 
   <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>

@@ -4,13 +4,50 @@
   
   
   <entry>
-    <title>hexo常用命令</title>
+    <title>FEMU仿真器学习笔记</title>
+    <link href="/2025/01/30/FEMU%E4%BB%BF%E7%9C%9F%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+    <url>/2025/01/30/FEMU%E4%BB%BF%E7%9C%9F%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
+    
+    <content type="html"><![CDATA[<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p>[1] <a href="FEMU/nvme%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90">FEMU&#x2F;nvme源码分析</a><br>[2] <a href="https://blog.xiocs.com/archives/46/">Femu 源码简析与测试环境配置</a><br>[3] <a href="https://blog.csdn.net/bijie1196/article/details/120752319">安装FEMU，并使用FEMU模拟SSD黑盒、OCSSD、NoSSD</a><br>[4] <a href="https://hackmd.io/@UzwkpqmTSKS3rukkbAQPBw/BJgAcpPIq">FEMU环境配置</a></p><h2 id="FEMU模拟器配置与安装"><a href="#FEMU模拟器配置与安装" class="headerlink" title="FEMU模拟器配置与安装"></a>FEMU模拟器配置与安装</h2><p>主要参考链接[3]和[4]，但是有两个地方是需要修改的。</p><ol><li>参考链接[3], 作者文档中使用的为-localtime，目前的QEMU版本已经移除了该方式，改为了-rtc base&#x3D;localtime</li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> qemu-system-x86_64 \<br>-cdrom ubuntu-22.04.1-live-server-amd64.iso \<br>-hda femu.qcow2 \<br>-boot d \<br>-net nic -net user \<br>-m 8192 \<br>-rtc base=localtime -smp 8 \<br>-cpu host \<br>-enable-kvm<br></code></pre></td></tr></table></figure><ol start="2"><li>编译报错FAILED: libqemuutil.a.p&#x2F;util_async.c.o error: storing the address of local variable ‘slice’ in ‘*ctx.bh_slice_list.sqh_las。参考以下方法解决<a href="https://gitlab.com/qemu-project/qemu/-/issues/1655">https://gitlab.com/qemu-project/qemu/-/issues/1655</a>.<br>需要修改femu-compile.sh脚本，增加参数“–disable-werror“，修改如下：</li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-meta">#!/bin/bash</span><br><br>NRCPUS=<span class="hljs-string">&quot;<span class="hljs-subst">$(cat /proc/cpuinfo | grep <span class="hljs-string">&quot;vendor_id&quot;</span> | wc -l)</span>&quot;</span><br><br>make clean<br><span class="hljs-comment"># --disable-werror --extra-cflags=-w --disable-git-update</span><br>../configure --enable-kvm --target-list=x86_64-softmmu --disable-werror<br>make -j <span class="hljs-variable">$NRCPUS</span><br><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;&quot;</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;===&gt; FEMU compilation done ...&quot;</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;&quot;</span><br><span class="hljs-built_in">exit</span><br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>FEMU</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>FEMU</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Hexo常用命令</title>
     <link href="/2025/01/29/hexo%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"/>
     <url>/2025/01/29/hexo%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
     
     <content type="html"><![CDATA[<p>以下内容由DeepSeek生成<br>Hexo 博客框架的常用命令整理，方便快速查阅和使用：</p><hr><h3 id="1-安装与初始化"><a href="#1-安装与初始化" class="headerlink" title="1. 安装与初始化"></a><strong>1. 安装与初始化</strong></h3><ul><li><strong>全局安装 Hexo</strong>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm install -g hexo-cli<br></code></pre></td></tr></table></figure></li><li><strong>初始化博客项目</strong>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo init &lt;文件夹名&gt;  <span class="hljs-comment"># 指定目录初始化</span><br><span class="hljs-built_in">cd</span> &lt;文件夹名&gt;        <span class="hljs-comment"># 进入项目目录</span><br></code></pre></td></tr></table></figure></li></ul><hr><h3 id="2-内容管理"><a href="#2-内容管理" class="headerlink" title="2. 内容管理"></a><strong>2. 内容管理</strong></h3><ul><li><strong>新建文章</strong>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo new <span class="hljs-string">&quot;文章标题&quot;</span>          <span class="hljs-comment"># 在 _posts 目录生成文章</span><br>hexo new draft <span class="hljs-string">&quot;草稿标题&quot;</span>    <span class="hljs-comment"># 在 _drafts 目录创建草稿</span><br></code></pre></td></tr></table></figure></li><li><strong>发布草稿为正式文章</strong>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo publish &lt;草稿文件名&gt;    <span class="hljs-comment"># 将草稿移动到 _posts 目录</span><br></code></pre></td></tr></table></figure></li><li><strong>新建页面（如 About 页面）</strong>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo new page <span class="hljs-string">&quot;about&quot;</span>       <span class="hljs-comment"># 在 source/about/index.md 创建页面</span><br></code></pre></td></tr></table></figure></li></ul><hr><h3 id="3-本地开发与调试"><a href="#3-本地开发与调试" class="headerlink" title="3. 本地开发与调试"></a><strong>3. 本地开发与调试</strong></h3><ul><li><strong>生成静态文件</strong>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo generate   <span class="hljs-comment"># 简写：hexo g</span><br></code></pre></td></tr></table></figure></li><li><strong>启动本地服务器</strong>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo server                <span class="hljs-comment"># 默认端口 4000</span><br>hexo server -p 5000        <span class="hljs-comment"># 指定端口</span><br>hexo server --draft        <span class="hljs-comment"># 预览草稿</span><br></code></pre></td></tr></table></figure></li><li><strong>清理缓存与静态文件</strong>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo clean     <span class="hljs-comment"># 删除 public 文件夹和缓存</span><br></code></pre></td></tr></table></figure></li></ul><hr><h3 id="4-部署与发布"><a href="#4-部署与发布" class="headerlink" title="4. 部署与发布"></a><strong>4. 部署与发布</strong></h3><ul><li><strong>部署到远程仓库（如 GitHub Pages）</strong>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo deploy    <span class="hljs-comment"># 简写：hexo d</span><br></code></pre></td></tr></table></figure></li><li><strong>生成并一键部署</strong>  <pre><code class="language-bash">hexo deploy --generate   # 简写：hexo d -g</code></pre></li></ul>]]></content>
     
     
+    <categories>
+      
+      <category>Hexo</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Hexo</tag>
+      
+    </tags>
     
   </entry>
   
